@@ -33,10 +33,28 @@ User-facing output → `docs/` only.
 `boot` — new project from intent prompt
 `resume` — existing project, audit then continue
 
-### Checkpoint
-One human interaction: Figma visual direction selection.
-figma-designer → [HUMAN PICKS] → figma-sync → autonomous from here.
+### Checkpoint — mandatory human gate
+One human interaction only: Figma visual direction selection.
+`figma-designer` produces 2–3 real Figma directions via MCP tool (not markdown) and shares the `figma.com` URL.
+Execution BLOCKS until the human explicitly validates one direction.
+Accepted: "option 2", "the dark one", "go with this", "looks good" — any unambiguous selection.
+Not accepted: silence, a new unrelated request, or a direction change without explicit validation.
+On validation → `figma-sync` → fill `figma-key` and `ds-prefix` in CLAUDE.md.
 After checkpoint: zero human gates. Document decisions in `docs/decisions/`.
+
+### Skill handoff protocol
+After each skill completes, before invoking the next:
+1. Write a synthesis block (≤150 words) — decisions made, artefacts produced, open constraints
+2. The next skill receives ONLY this synthesis + the relevant `docs/` files — not the full prior context
+3. Format:
+```
+## Handoff → <next-skill>
+Components/schemas produced: ...
+Key decisions: ...
+Constraints for next skill: ...
+What NOT to redo: ...
+```
+Never repeat implementation details already in `docs/`. Reference them by path.
 
 ### Execution rules
 1. Skill before any file read or edit

@@ -17,6 +17,15 @@ Extract from prompt:
 | Multiple orgs / accounts | `multi-tenant: yes/no` |
 | Payment flow | `payments: yes/no` |
 
+For each entity, enumerate user actions:
+
+| Entity | Actions |
+|---|---|
+| <entity> | list · detail · create · edit · delete · [domain-specific: share, archive, export…] |
+
+Think features, not presentation. Every entity has at minimum: list view, detail view, create, edit, delete, and at least one domain-specific action (assign, activate, export, share…).
+If an entity has no domain-specific action beyond CRUD, it is likely a sub-entity of another.
+
 Write `docs/product-intent.md`:
 ```markdown
 # Product Intent
@@ -60,17 +69,22 @@ architecture-pattern: <selected>
 skill-chain: <ordered list>
 ```
 
-## Step 4 — Figma checkpoint [ONLY HUMAN GATE]
+## Step 4 — Figma checkpoint [ONLY HUMAN GATE — HARD BLOCK]
 
 Trigger `figma-designer` with:
 - domain
 - detected personality (enterprise/consumer/technical/creative)
-- primary entities
+- primary entities + their action matrix
 - mobile: yes/no
 
-`figma-designer` produces 2–3 visual directions in Figma.
-Wait for human selection.
-On selection → trigger `figma-sync` → fill `figma-key` and `ds-prefix` in CLAUDE.md.
+`figma-designer` MUST produce 2–3 real Figma frames via MCP tool (`mcp__figma__generate_figma_design` or equivalent).
+A markdown mock, a text description, or a wireframe in code is NOT valid — the output must be a real `figma.com` URL shared with the user.
+
+**BLOCK here.** Alfred shares the Figma URL and waits for the human to validate.
+Accepted confirmation: any explicit selection or approval ("option 2", "the dark one", "go with this", "looks good").
+Not accepted: silence, ambiguity, or a new unrelated request.
+
+On confirmed selection → `figma-sync` → fill `figma-key` and `ds-prefix` in CLAUDE.md.
 
 ## Step 5 — Autonomous execution
 

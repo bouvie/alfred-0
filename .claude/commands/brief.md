@@ -71,6 +71,15 @@ _[Date]_
 1. [Flow name]: [user goal]
 2. ...
 
+## Feature matrix
+| Entity | List | Detail | Create | Edit | Delete | Domain actions |
+|---|---|---|---|---|---|---|
+| [entity] | ✓ | ✓ | ✓ | ✓ | ✓ | [assign / export / archive / share / ...] |
+
+Every entity must have at minimum: list, detail, create, edit, delete.
+Domain actions are the product — they represent what makes this app specific.
+An entity with no domain action beyond CRUD is probably a sub-entity.
+
 ## V1 scope
 **Must have**
 - [functional capability, not feature name]
@@ -104,3 +113,5 @@ Existing project + design work → `figma-designer` reads `docs/product-brief.md
 - A brief without a clear problem statement is incomplete — do not proceed to handoff
 - If the user is vague: propose a hypothesis and ask them to correct it — easier than extracting from scratch
 - Max 3 questions per message — never interrogate
+- A brief without a feature matrix is incomplete — every entity must have its action list before handoff
+- "Manage X" is not a flow — decompose into: list X, view X, create X, edit X, delete X, [domain action]
