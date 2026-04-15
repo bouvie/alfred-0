@@ -6,17 +6,17 @@
 ## [PROJECT]
 <!-- Filled by boot or resume skill — do not edit manually -->
 
-name:
-domain:
-entities:
-users:
-realtime:
-mobile:
-multi-tenant:
+name: CRM Formateur Indépendant
+domain: crm-formateur
+entities: Contact, Client, Session, Créneau, Collaborateur
+users: formateur (admin), collaborateur
+realtime: false
+mobile: false
+multi-tenant: false
 figma-key:
-ds-prefix:
-architecture-pattern:
-skill-chain:
+ds-prefix: ft
+architecture-pattern: monorepo-nx-angular-nestjs-graphql
+skill-chain: brief → figma-designer → figma-sync → design-system → feature-design → fullstack-conception → data-model → auth → local-devops → devops-cloud
 
 ---
 

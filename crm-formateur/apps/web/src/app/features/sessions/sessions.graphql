@@ -1,0 +1,32 @@
+# Owned by SessionsComponent
+
+fragment SessionRow on Session {
+  id
+  title
+  contact {
+    id
+    name
+    company
+  }
+  date
+  duration
+  status
+}
+
+query GetSessions($status: SessionStatus) {
+  sessions(status: $status) {
+    ...SessionRow
+  }
+}
+
+mutation CreateSession($input: CreateSessionInput!) {
+  createSession(input: $input) {
+    ...SessionRow
+  }
+}
+
+mutation UpdateSession($id: ID!, $input: UpdateSessionInput!) {
+  updateSession(id: $id, input: $input) {
+    ...SessionRow
+  }
+}

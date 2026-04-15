@@ -1,0 +1,110 @@
+:host { display: block; height: 100%; }
+
+.sidenav {
+  display: flex;
+  flex-direction: column;
+  width: 220px;
+  height: 100%;
+  background: var(--ft-surface);
+  border-right: 1px solid var(--ft-border);
+  padding: var(--ft-space-3);
+  transition: width var(--ft-duration-slow) var(--ft-ease-standard);
+  overflow: hidden;
+}
+
+.sidenav--collapsed { width: 60px; }
+
+/* Logo */
+.sidenav__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--ft-space-3);
+  padding: var(--ft-space-2) var(--ft-space-2) var(--ft-space-6);
+  overflow: hidden;
+}
+
+.sidenav__logo-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--ft-radius-md);
+  background: var(--ft-primary);
+  color: var(--ft-primary-text);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.sidenav__logo-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ft-text);
+  white-space: nowrap;
+}
+
+/* List */
+.sidenav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ft-space-1);
+}
+
+/* Item */
+.sidenav__item {
+  display: flex;
+  align-items: center;
+  gap: var(--ft-space-3);
+  width: 100%;
+  height: 40px;
+  padding: 0 var(--ft-space-2);
+  border: none;
+  border-radius: var(--ft-radius-md);
+  background: transparent;
+  color: var(--ft-text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background var(--ft-duration-normal) var(--ft-ease-standard),
+    color var(--ft-duration-normal) var(--ft-ease-standard),
+    box-shadow var(--ft-duration-slow) var(--ft-ease-spring);
+}
+
+.sidenav__item:hover {
+  background: var(--ft-primary-hover);
+  color: var(--ft-text);
+}
+
+.sidenav__item--active {
+  background: var(--ft-primary-subtle);
+  color: var(--ft-primary);
+  box-shadow: var(--ft-shadow-glow-primary);
+}
+
+.sidenav__icon { flex-shrink: 0; }
+
+.sidenav__label {
+  font-size: 14px;
+  font-weight: 500;
+  flex: 1;
+  text-align: left;
+}
+
+.sidenav__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 var(--ft-space-1);
+  border-radius: var(--ft-radius-full);
+  background: var(--ft-primary);
+  color: var(--ft-primary-text);
+  font-size: 10px;
+  font-weight: 700;
+}

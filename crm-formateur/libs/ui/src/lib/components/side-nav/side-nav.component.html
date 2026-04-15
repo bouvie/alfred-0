@@ -1,0 +1,37 @@
+<nav
+  class="sidenav"
+  [class.sidenav--collapsed]="collapsed()"
+  role="navigation"
+  aria-label="Navigation principale"
+>
+  <div class="sidenav__logo">
+    <span class="sidenav__logo-mark">FT</span>
+    @if (!collapsed()) {
+      <span class="sidenav__logo-name">CRM Formateur</span>
+    }
+  </div>
+
+  <ul class="sidenav__list" role="list">
+    @for (item of items(); track item.id) {
+      <li>
+        <button
+          class="sidenav__item"
+          [class.sidenav__item--active]="activeRoute() === item.route"
+          (click)="navClick.emit(item)"
+          [attr.aria-current]="activeRoute() === item.route ? 'page' : null"
+          [title]="collapsed() ? item.label : ''"
+        >
+          <svg class="sidenav__icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path [attr.d]="item.icon" />
+          </svg>
+          @if (!collapsed()) {
+            <span class="sidenav__label">{{ item.label }}</span>
+            @if (item.badge) {
+              <span class="sidenav__badge">{{ item.badge }}</span>
+            }
+          }
+        </button>
+      </li>
+    }
+  </ul>
+</nav>

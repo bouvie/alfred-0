@@ -1,0 +1,153 @@
+<div class="pipeline">
+  <div class="pipeline__header">
+    <div class="pipeline__header-info">
+      <h1 class="pipeline__title">Pipeline</h1>
+      @if (pipeline(); as p) {
+        <span class="pipeline__count">{{ p.totalContacts }} contact{{ p.totalContacts > 1 ? 's' : '' }}</span>
+      }
+    </div>
+    <ft-button variant="primary" size="sm" (clicked)="startCreate()">+ Ajouter un contact</ft-button>
+  </div>
+
+  @if (pipeline(); as p) {
+    <div class="pipeline__board">
+      @for (col of p.columns; track col.id) {
+        <div class="pipeline__column">
+          <div class="pipeline__column-header">
+            <span class="pipeline__column-title">{{ col.title }}</span>
+            <span class="pipeline__column-count">{{ col.contacts.length }}</span>
+          </div>
+
+          <div
+            class="pipeline__cards"
+            [class.pipeline__cards--dragover]="dragOverColumn() === col.id"
+            (dragover)="onDragOver($event, col.id)"
+            (dragleave)="onDragLeave($event, col.id)"
+            (drop)="onDrop($event, col.id)"
+          >
+            @for (contact of col.contacts; track contact.id) {
+              <div
+                class="pipeline__card-wrapper"
+                [class.pipeline__card-wrapper--dragging]="draggingId() === contact.id"
+                draggable="true"
+                (dragstart)="onDragStart($event, contact)"
+                (dragend)="onDragEnd()"
+              >
+                <ft-kanban-card
+                  [card]="toCardData(contact)"
+                  [selected]="selectedCardId() === contact.id"
+                  (cardClick)="selectCard($event)"
+                />
+              </div>
+            }
+            @empty {
+              <div class="pipeline__empty">Aucun contact</div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="pipeline__loading">Chargement…</div>
+  }
+</div>
+
+<!-- Panneau de création -->
+@if (adding()) {
+  <div class="pipeline__overlay" (click)="cancelCreate()"></div>
+  <aside class="pipeline__panel">
+    <div class="pipeline__panel-header">
+      <div class="pipeline__panel-identity">
+        <span class="pipeline__panel-name">Nouveau contact</span>
+      </div>
+      <button class="pipeline__panel-close" (click)="cancelCreate()" aria-label="Annuler">✕</button>
+    </div>
+    <div class="pipeline__panel-body">
+      <div class="pipeline__panel-section">
+        <span class="pipeline__panel-label">Nom *</span>
+        <input class="pipeline__panel-input" type="text" [value]="createName()"
+          (input)="createName.set($any($event.target).value)" placeholder="Nom du contact" />
+      </div>
+      <div class="pipeline__panel-section">
+        <span class="pipeline__panel-label">Entreprise</span>
+        <input class="pipeline__panel-input" type="text" [value]="createCompany()"
+          (input)="createCompany.set($any($event.target).value)" placeholder="Optionnel" />
+      </div>
+      <div class="pipeline__panel-section">
+        <span class="pipeline__panel-label">Statut initial</span>
+        <div class="pipeline__panel-statuses">
+          @for (s of allStatuses; track s) {
+            <button class="pipeline__panel-status-btn"
+              [class.pipeline__panel-status-btn--active]="createContactStatus() === s"
+              (click)="createContactStatus.set(s)">{{ statusLabels[s] }}</button>
+          }
+        </div>
+      </div>
+    </div>
+    <div class="pipeline__panel-footer">
+      <ft-button variant="ghost" size="sm" (clicked)="cancelCreate()">Annuler</ft-button>
+      <ft-button variant="primary" size="sm" (clicked)="saveCreate()">Créer</ft-button>
+    </div>
+  </aside>
+}
+
+<!-- Panneau de détail -->
+@if (selectedContact(); as sel) {
+  <div class="pipeline__overlay" (click)="closePanel()"></div>
+  <aside class="pipeline__panel">
+    <div class="pipeline__panel-header">
+      <div class="pipeline__panel-identity">
+        <span class="pipeline__panel-name">{{ sel.contact.name }}</span>
+        @if (sel.contact.company) {
+          <span class="pipeline__panel-company">{{ sel.contact.company }}</span>
+        }
+      </div>
+      <button class="pipeline__panel-close" (click)="closePanel()" aria-label="Fermer">✕</button>
+    </div>
+
+    <div class="pipeline__panel-body">
+      <div class="pipeline__panel-section">
+        <span class="pipeline__panel-label">Statut</span>
+        <ft-badge [variant]="$any(statusVariants[sel.contact.status])" [dot]="true" size="sm">
+          {{ statusLabels[sel.contact.status] }}
+        </ft-badge>
+      </div>
+
+      @if (sel.contact.tags?.length) {
+        <div class="pipeline__panel-section">
+          <span class="pipeline__panel-label">Tags</span>
+          <div class="pipeline__panel-tags">
+            @for (tag of sel.contact.tags; track tag) {
+              <span class="pipeline__panel-tag">{{ tag }}</span>
+            }
+          </div>
+        </div>
+      }
+
+      @if (sel.contact.lastContact) {
+        <div class="pipeline__panel-section">
+          <span class="pipeline__panel-label">Dernier contact</span>
+          <span class="pipeline__panel-value">{{ formatDate(sel.contact.lastContact!) }}</span>
+        </div>
+      }
+
+      <div class="pipeline__panel-section">
+        <span class="pipeline__panel-label">Changer le statut</span>
+        <div class="pipeline__panel-statuses">
+          @for (s of allStatuses; track s) {
+            <button
+              class="pipeline__panel-status-btn"
+              [class.pipeline__panel-status-btn--active]="sel.contact.status === s"
+              (click)="updateStatus(sel.contact, s)"
+            >{{ statusLabels[s] }}</button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="pipeline__panel-footer">
+      <ft-button variant="ghost" size="sm" (click)="closePanel()">Fermer</ft-button>
+      <ft-button variant="danger" size="sm" (click)="deleteContact(sel.contact)">Supprimer</ft-button>
+    </div>
+  </aside>
+}

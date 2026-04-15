@@ -1,0 +1,37 @@
+<article
+  class="kanban-card"
+  [class.kanban-card--selected]="selected()"
+  (click)="cardClick.emit(card())"
+  role="button"
+  tabindex="0"
+  [attr.aria-label]="card().name"
+  (keydown.enter)="cardClick.emit(card())"
+  (keydown.space)="cardClick.emit(card())"
+>
+  <div class="kanban-card__header">
+    <ft-avatar [name]="card().name" size="sm" />
+    <div class="kanban-card__identity">
+      <span class="kanban-card__name">{{ card().name }}</span>
+      @if (card().company) {
+        <span class="kanban-card__company">{{ card().company }}</span>
+      }
+    </div>
+  </div>
+
+  <div class="kanban-card__footer">
+    <ft-badge [variant]="statusBadgeVariant()" [dot]="true" size="sm">
+      {{ statusLabel() }}
+    </ft-badge>
+    @if (relativeDate()) {
+      <span class="kanban-card__date">{{ relativeDate() }}</span>
+    }
+  </div>
+
+  @if (card().tags?.length) {
+    <div class="kanban-card__tags">
+      @for (tag of card().tags!; track tag) {
+        <span class="kanban-card__tag">{{ tag }}</span>
+      }
+    </div>
+  }
+</article>

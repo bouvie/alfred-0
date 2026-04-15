@@ -1,0 +1,197 @@
+<div class="contacts">
+  <div class="contacts__header">
+    <h1 class="contacts__title">Contacts</h1>
+    <ft-button variant="primary" size="sm" (clicked)="startCreate()">+ Nouveau contact</ft-button>
+  </div>
+
+  <div class="contacts__list">
+    @for (contact of contacts(); track contact.id) {
+      <div
+        class="contacts__row"
+        [class.contacts__row--selected]="selectedId() === contact.id"
+        (click)="openContact(contact)"
+      >
+        <ft-avatar [name]="contact.name" size="md" />
+        <div class="contacts__info">
+          <span class="contacts__name">{{ contact.name }}</span>
+          @if (contact.company) {
+            <span class="contacts__company">{{ contact.company }}</span>
+          }
+        </div>
+        <div class="contacts__tags">
+          @for (tag of (contact.tags ?? []); track tag) {
+            <span class="contacts__tag">{{ tag }}</span>
+          }
+        </div>
+        <ft-badge [variant]="$any(STATUS_VARIANTS[contact.status])" size="sm" [dot]="true">
+          {{ STATUS_LABELS[contact.status] }}
+        </ft-badge>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Panneau de création -->
+@if (adding()) {
+  <div class="contacts__overlay" (click)="cancelCreate()"></div>
+  <aside class="contacts__panel">
+    <div class="contacts__panel-header">
+      <span class="contacts__panel-name">Nouveau contact</span>
+      <button class="contacts__panel-close" (click)="cancelCreate()" aria-label="Annuler">✕</button>
+    </div>
+    <div class="contacts__panel-body">
+      <div class="contacts__panel-section">
+        <label class="contacts__panel-label" for="create-name">Nom *</label>
+        <input id="create-name" class="contacts__panel-input" type="text" [value]="createName()"
+          (input)="createName.set($any($event.target).value)" placeholder="Nom du contact" />
+      </div>
+      <div class="contacts__panel-section">
+        <label class="contacts__panel-label" for="create-company">Entreprise</label>
+        <input id="create-company" class="contacts__panel-input" type="text" [value]="createCompany()"
+          (input)="createCompany.set($any($event.target).value)" placeholder="Optionnel" />
+      </div>
+      <div class="contacts__panel-section">
+        <span class="contacts__panel-label">Statut</span>
+        <div class="contacts__panel-statuses">
+          @for (s of allStatuses; track s) {
+            <button class="contacts__panel-status-btn"
+              [class.contacts__panel-status-btn--active]="createStatus() === s"
+              (click)="createStatus.set(s)">{{ STATUS_LABELS[s] }}</button>
+          }
+        </div>
+      </div>
+      <div class="contacts__panel-section">
+        <label class="contacts__panel-label" for="create-notes">Notes</label>
+        <textarea id="create-notes" class="contacts__panel-textarea" rows="4" [value]="createNotes()"
+          (input)="createNotes.set($any($event.target).value)"></textarea>
+      </div>
+    </div>
+    <div class="contacts__panel-footer">
+      <ft-button variant="ghost" size="sm" (clicked)="cancelCreate()">Annuler</ft-button>
+      <ft-button variant="primary" size="sm" (clicked)="saveCreate()">Créer</ft-button>
+    </div>
+  </aside>
+}
+
+<!-- Panneau de détail / édition -->
+@if (selectedContact(); as contact) {
+  <div class="contacts__overlay" (click)="closePanel()"></div>
+  <aside class="contacts__panel">
+
+    @if (!editing()) {
+      <!-- Vue détail -->
+      <div class="contacts__panel-header">
+        <div class="contacts__panel-identity">
+          <ft-avatar [name]="contact.name" size="lg" />
+          <div>
+            <span class="contacts__panel-name">{{ contact.name }}</span>
+            @if (contact.company) {
+              <span class="contacts__panel-company">{{ contact.company }}</span>
+            }
+          </div>
+        </div>
+        <button class="contacts__panel-close" (click)="closePanel()" aria-label="Fermer">✕</button>
+      </div>
+
+      <div class="contacts__panel-body">
+        <div class="contacts__panel-section">
+          <span class="contacts__panel-label">Statut</span>
+          <ft-badge [variant]="$any(STATUS_VARIANTS[contact.status])" [dot]="true" size="sm">
+            {{ STATUS_LABELS[contact.status] }}
+          </ft-badge>
+        </div>
+
+        @if (contact.tags?.length) {
+          <div class="contacts__panel-section">
+            <span class="contacts__panel-label">Tags</span>
+            <div class="contacts__panel-tags">
+              @for (tag of contact.tags; track tag) {
+                <span class="contacts__panel-tag">{{ tag }}</span>
+              }
+            </div>
+          </div>
+        }
+
+        @if (contact.notes) {
+          <div class="contacts__panel-section">
+            <span class="contacts__panel-label">Notes</span>
+            <p class="contacts__panel-notes">{{ contact.notes }}</p>
+          </div>
+        }
+
+        @if (contact.lastContact) {
+          <div class="contacts__panel-section">
+            <span class="contacts__panel-label">Dernier contact</span>
+            <span class="contacts__panel-value">{{ contact.lastContact }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="contacts__panel-footer">
+        <ft-button variant="secondary" size="sm" (click)="startEdit(contact)">Modifier</ft-button>
+        <ft-button variant="danger" size="sm" (click)="deleteContact(contact)">Supprimer</ft-button>
+      </div>
+
+    } @else {
+      <!-- Vue édition -->
+      <div class="contacts__panel-header">
+        <span class="contacts__panel-name">Modifier le contact</span>
+        <button class="contacts__panel-close" (click)="editing.set(false)" aria-label="Annuler">✕</button>
+      </div>
+
+      <div class="contacts__panel-body">
+        <div class="contacts__panel-section">
+          <label class="contacts__panel-label" for="edit-name">Nom</label>
+          <input
+            id="edit-name"
+            class="contacts__panel-input"
+            type="text"
+            [value]="editName()"
+            (input)="editName.set($any($event.target).value)"
+          />
+        </div>
+
+        <div class="contacts__panel-section">
+          <label class="contacts__panel-label" for="edit-company">Entreprise</label>
+          <input
+            id="edit-company"
+            class="contacts__panel-input"
+            type="text"
+            [value]="editCompany()"
+            (input)="editCompany.set($any($event.target).value)"
+          />
+        </div>
+
+        <div class="contacts__panel-section">
+          <span class="contacts__panel-label">Statut</span>
+          <div class="contacts__panel-statuses">
+            @for (s of allStatuses; track s) {
+              <button
+                class="contacts__panel-status-btn"
+                [class.contacts__panel-status-btn--active]="editStatus() === s"
+                (click)="editStatus.set(s)"
+              >{{ STATUS_LABELS[s] }}</button>
+            }
+          </div>
+        </div>
+
+        <div class="contacts__panel-section">
+          <label class="contacts__panel-label" for="edit-notes">Notes</label>
+          <textarea
+            id="edit-notes"
+            class="contacts__panel-textarea"
+            rows="4"
+            [value]="editNotes()"
+            (input)="editNotes.set($any($event.target).value)"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="contacts__panel-footer">
+        <ft-button variant="ghost" size="sm" (click)="editing.set(false)">Annuler</ft-button>
+        <ft-button variant="primary" size="sm" (click)="saveEdit(contact)">Enregistrer</ft-button>
+      </div>
+    }
+
+  </aside>
+}

@@ -1,0 +1,131 @@
+scalar DateTime
+
+# ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum ContactStatus {
+  PROSPECT
+  CONTACTED
+  QUALIFIED
+  PROPOSAL
+  WON
+  LOST
+}
+
+enum SessionStatus {
+  PLANNED
+  CONFIRMED
+  DONE
+  CANCELLED
+}
+
+# ─── Types ───────────────────────────────────────────────────────────────────
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+}
+
+type Contact {
+  id: ID!
+  name: String!
+  company: String
+  status: ContactStatus!
+  tags: [String!]!
+  lastContact: DateTime
+  notes: String
+  assignee: User
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Session {
+  id: ID!
+  title: String!
+  contact: Contact!
+  date: DateTime!
+  duration: Int!
+  status: SessionStatus!
+  notes: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type PipelineColumn {
+  id: ID!
+  title: String!
+  position: Int!
+  contacts: [Contact!]!
+}
+
+type Pipeline {
+  columns: [PipelineColumn!]!
+  totalContacts: Int!
+}
+
+# ─── Queries ─────────────────────────────────────────────────────────────────
+
+type Query {
+  me: User
+  contacts(status: ContactStatus, search: String): [Contact!]!
+  contact(id: ID!): Contact
+  sessions(status: SessionStatus): [Session!]!
+  session(id: ID!): Session
+  pipeline: Pipeline!
+}
+
+# ─── Mutations ───────────────────────────────────────────────────────────────
+
+input CreateContactInput {
+  name: String!
+  company: String
+  status: ContactStatus
+  tags: [String!]
+  notes: String
+  assigneeId: ID
+}
+
+input UpdateContactInput {
+  name: String
+  company: String
+  status: ContactStatus
+  tags: [String!]
+  notes: String
+  lastContact: DateTime
+  assigneeId: ID
+}
+
+input MoveContactInput {
+  contactId: ID!
+  columnId: String!
+  position: Int!
+}
+
+input CreateSessionInput {
+  title: String!
+  contactId: ID!
+  date: DateTime!
+  duration: Int!
+  status: SessionStatus
+  notes: String
+}
+
+input UpdateSessionInput {
+  title: String
+  contactId: ID
+  date: DateTime
+  duration: Int
+  status: SessionStatus
+  notes: String
+}
+
+type Mutation {
+  createContact(input: CreateContactInput!): Contact!
+  updateContact(id: ID!, input: UpdateContactInput!): Contact!
+  moveContact(input: MoveContactInput!): Contact!
+  deleteContact(id: ID!): Boolean!
+
+  createSession(input: CreateSessionInput!): Session!
+  updateSession(id: ID!, input: UpdateSessionInput!): Session!
+  deleteSession(id: ID!): Boolean!
+}

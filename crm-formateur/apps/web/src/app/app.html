@@ -1,0 +1,38 @@
+<div class="app-shell">
+  <ft-side-nav
+    class="app-shell__nav"
+    [items]="navItems"
+    [activeRoute]="activeRoute()"
+    [collapsed]="sidenavCollapsed()"
+    (navClick)="navigate($event)"
+  />
+
+  <div class="app-shell__main">
+    <ft-top-bar
+      userName="Formateur"
+      [pageTitle]="pageTitle()"
+      (menuToggled)="toggleSidenav()"
+    />
+    <main class="app-shell__content">
+      <router-outlet />
+    </main>
+  </div>
+
+  <nav class="app-shell__bottom-nav" aria-label="Navigation">
+    @for (item of navItems; track item.id) {
+      <button
+        class="app-shell__tab"
+        [class.app-shell__tab--active]="activeRoute().startsWith(item.route)"
+        (click)="navigate(item)"
+        [attr.aria-current]="activeRoute().startsWith(item.route) ? 'page' : null"
+      >
+        <svg width="22" height="22" viewBox="0 0 20 20" fill="none"
+          stroke="currentColor" stroke-width="1.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path [attr.d]="item.icon" />
+        </svg>
+        <span class="app-shell__tab-label">{{ item.label }}</span>
+      </button>
+    }
+  </nav>
+</div>

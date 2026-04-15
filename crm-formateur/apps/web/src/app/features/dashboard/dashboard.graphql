@@ -1,0 +1,13 @@
+# Owned by DashboardComponent
+
+query GetDashboardStats {
+  contacts {
+    id
+    status
+  }
+  sessions {
+    id
+    status
+    date
+  }
+}

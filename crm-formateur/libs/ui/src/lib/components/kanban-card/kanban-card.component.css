@@ -1,0 +1,92 @@
+:host { display: block; }
+
+.kanban-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ft-space-3);
+  padding: var(--ft-space-3);
+  background: var(--ft-surface-2);
+  border: 1px solid var(--ft-border);
+  border-radius: var(--ft-radius-lg);
+  cursor: pointer;
+  transition:
+    border-color var(--ft-duration-normal) var(--ft-ease-standard),
+    box-shadow var(--ft-duration-normal) var(--ft-ease-standard),
+    transform var(--ft-duration-fast) var(--ft-ease-spring);
+}
+
+.kanban-card:hover {
+  border-color: var(--ft-border-strong);
+  box-shadow: var(--ft-shadow-md);
+  transform: translateY(-1px);
+}
+
+.kanban-card:active {
+  transform: scale(0.98);
+}
+
+.kanban-card--selected {
+  border-color: var(--ft-primary);
+  box-shadow: var(--ft-shadow-glow-primary);
+}
+
+.kanban-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--ft-space-2);
+}
+
+.kanban-card__identity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.kanban-card__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ft-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kanban-card__company {
+  font-size: 12px;
+  color: var(--ft-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kanban-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ft-space-2);
+}
+
+.kanban-card__date {
+  font-size: 11px;
+  color: var(--ft-text-disabled);
+  white-space: nowrap;
+}
+
+.kanban-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ft-space-1);
+}
+
+.kanban-card__tag {
+  display: inline-flex;
+  align-items: center;
+  height: 18px;
+  padding: 0 var(--ft-space-2);
+  border-radius: var(--ft-radius-full);
+  background: var(--ft-surface-3);
+  color: var(--ft-text-secondary);
+  font-size: 11px;
+  font-weight: 500;
+}

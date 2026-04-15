@@ -1,0 +1,120 @@
+/* ============================================================
+   CRM Formateur — Design Tokens "Cockpit"
+   Préfixe : --ft-
+   Source de vérité : docs/design-tokens.md
+   ============================================================ */
+
+:root {
+
+  /* ─── Élévation ─────────────────────────────────────────── */
+  --ft-bg-deep:    #080C12;
+  --ft-bg:         #0F1419;
+  --ft-surface:    #151E2A;
+  --ft-surface-2:  #1C2A3A;
+  --ft-surface-3:  #243347;
+  --ft-surface-4:  #2C3D55;
+
+  /* ─── Primary — Cyan électrique ─────────────────────────── */
+  --ft-primary:         #00C8E8;
+  --ft-primary-text:    #0A1A20;
+  --ft-primary-hover:   rgba(0, 200, 232, 0.10);
+  --ft-primary-pressed: rgba(0, 200, 232, 0.20);
+  --ft-primary-focus:   rgba(0, 200, 232, 0.35);
+  --ft-primary-subtle:  rgba(0, 200, 232, 0.06);
+
+  /* ─── Success — Vert jade ────────────────────────────────── */
+  --ft-success:         #10C07A;
+  --ft-success-text:    #0A1A14;
+  --ft-success-hover:   rgba(16, 192, 122, 0.10);
+  --ft-success-pressed: rgba(16, 192, 122, 0.20);
+  --ft-success-focus:   rgba(16, 192, 122, 0.35);
+  --ft-success-subtle:  rgba(16, 192, 122, 0.06);
+
+  /* ─── Warning — Ambre ───────────────────────────────────── */
+  --ft-warning:         #F5A623;
+  --ft-warning-text:    #1A1200;
+  --ft-warning-hover:   rgba(245, 166, 35, 0.10);
+  --ft-warning-pressed: rgba(245, 166, 35, 0.20);
+  --ft-warning-focus:   rgba(245, 166, 35, 0.35);
+  --ft-warning-subtle:  rgba(245, 166, 35, 0.06);
+
+  /* ─── Danger — Rouge corail ──────────────────────────────── */
+  --ft-danger:         #E8445A;
+  --ft-danger-text:    #1A0408;
+  --ft-danger-hover:   rgba(232, 68, 90, 0.10);
+  --ft-danger-pressed: rgba(232, 68, 90, 0.20);
+  --ft-danger-focus:   rgba(232, 68, 90, 0.35);
+  --ft-danger-subtle:  rgba(232, 68, 90, 0.06);
+
+  /* ─── Info — Bleu ardoise ────────────────────────────────── */
+  --ft-info:         #4A90D9;
+  --ft-info-text:    #08101A;
+  --ft-info-hover:   rgba(74, 144, 217, 0.10);
+  --ft-info-pressed: rgba(74, 144, 217, 0.20);
+  --ft-info-focus:   rgba(74, 144, 217, 0.35);
+  --ft-info-subtle:  rgba(74, 144, 217, 0.06);
+
+  /* ─── Texte ──────────────────────────────────────────────── */
+  --ft-text:           #E8EDF2;
+  --ft-text-secondary: #8B9BB4;
+  --ft-text-disabled:  #4A5568;
+  --ft-text-inverse:   #0F1419;
+
+  /* ─── Bordures ───────────────────────────────────────────── */
+  --ft-border:       rgba(255, 255, 255, 0.08);
+  --ft-border-strong: rgba(255, 255, 255, 0.16);
+  --ft-border-focus: var(--ft-primary);
+
+  /* ─── Spacing (base 4px) ─────────────────────────────────── */
+  --ft-space-1:  4px;
+  --ft-space-2:  8px;
+  --ft-space-3:  12px;
+  --ft-space-4:  16px;
+  --ft-space-5:  20px;
+  --ft-space-6:  24px;
+  --ft-space-8:  32px;
+  --ft-space-10: 40px;
+  --ft-space-12: 48px;
+  --ft-space-16: 64px;
+
+  /* ─── Radius ─────────────────────────────────────────────── */
+  --ft-radius-sm:   4px;
+  --ft-radius-md:   8px;
+  --ft-radius-lg:   12px;
+  --ft-radius-xl:   16px;
+  --ft-radius-2xl:  20px;
+  --ft-radius-full: 9999px;
+
+  /* ─── Shadow ─────────────────────────────────────────────── */
+  --ft-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --ft-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --ft-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --ft-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.7);
+  --ft-shadow-glow-primary: 0 0 12px 2px rgba(0, 200, 232, 0.15);
+  --ft-shadow-glow-success: 0 0 12px 2px rgba(16, 192, 122, 0.15);
+  --ft-shadow-glow-danger:  0 0 12px 2px rgba(232, 68, 90, 0.15);
+
+  /* ─── Motion — durées ────────────────────────────────────── */
+  --ft-duration-instant: 0ms;
+  --ft-duration-fast:    120ms;
+  --ft-duration-normal:  200ms;
+  --ft-duration-slow:    300ms;
+  --ft-duration-slower:  500ms;
+  --ft-duration-lazy:    800ms;
+
+  /* ─── Motion — easings ───────────────────────────────────── */
+  --ft-ease-standard:   cubic-bezier(0.2, 0, 0, 1);
+  --ft-ease-decelerate: cubic-bezier(0, 0, 0, 1);
+  --ft-ease-accelerate: cubic-bezier(0.3, 0, 1, 1);
+  --ft-ease-spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ─── Glassmorphisme ─────────────────────────────────────── */
+  --ft-glass-nav:     rgba(21, 30, 42, 0.65);
+  --ft-glass-sheet:   rgba(21, 30, 42, 0.70);
+  --ft-glass-overlay: rgba(8, 12, 18, 0.80);
+  --ft-glass-border:  rgba(255, 255, 255, 0.08);
+
+  /* ─── Typography ─────────────────────────────────────────── */
+  --ft-font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --ft-font-mono:   'JetBrains Mono', 'Fira Code', monospace;
+}

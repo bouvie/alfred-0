@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import '../../../libs/ui/src/lib/tokens/variables.css';
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--ft-bg);
+  color: var(--ft-text);
+  font-family: var(--ft-font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--ft-border-strong); border-radius: var(--ft-radius-full); }
+::-webkit-scrollbar-thumb:hover { background: var(--ft-text-disabled); }
+
+* { scrollbar-width: thin; scrollbar-color: var(--ft-border-strong) transparent; }

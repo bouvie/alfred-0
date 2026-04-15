@@ -1,0 +1,186 @@
+<div class="sessions">
+  <div class="sessions__header">
+    <h1 class="sessions__title">Sessions</h1>
+    <ft-button variant="primary" size="sm" (clicked)="startCreate()">+ Nouvelle session</ft-button>
+  </div>
+
+  <!-- Navigation mois -->
+  <div class="cal__nav">
+    <button class="cal__nav-btn" (click)="prevMonth()" aria-label="Mois précédent">‹</button>
+    <div class="cal__nav-center">
+      <span class="cal__month-label">{{ monthLabel() }}</span>
+      <button class="cal__today-btn" (click)="goToToday()">Aujourd'hui</button>
+    </div>
+    <button class="cal__nav-btn" (click)="nextMonth()" aria-label="Mois suivant">›</button>
+  </div>
+
+  <!-- Grille calendrier — drag & drop sur les cellules -->
+  <div class="cal__grid">
+    <!-- En-têtes jours -->
+    @for (day of weekDays; track day) {
+      <div class="cal__weekday">{{ day }}</div>
+    }
+
+    <!-- Cellules jours -->
+    @for (day of calendarDays(); track trackDay($index, day)) {
+      <div
+        class="cal__cell"
+        [class.cal__cell--other-month]="!day.currentMonth"
+        [class.cal__cell--today]="day.isToday"
+        [class.cal__cell--dragover]="dragOverDay() === day.key"
+        (dragover)="onCalDragOver($event, day.key)"
+        (dragleave)="onCalDragLeave($event, day.key)"
+        (drop)="onCalDrop($event, day)"
+      >
+        <span class="cal__day-num">{{ day.date.getDate() }}</span>
+
+        <div class="cal__events">
+          @for (session of getSessionsForDay(day.key); track trackSession($index, session)) {
+            <button
+              class="cal__chip"
+              [class.cal__chip--planned]="session.status === 'PLANNED'"
+              [class.cal__chip--confirmed]="session.status === 'CONFIRMED'"
+              [class.cal__chip--done]="session.status === 'DONE'"
+              [class.cal__chip--cancelled]="session.status === 'CANCELLED'"
+              [class.cal__chip--dragging]="draggingSession()?.id === session.id"
+              draggable="true"
+              (dragstart)="onSessionDragStart($event, session)"
+              (dragend)="onSessionDragEnd()"
+              (click)="openSession(session, $event)"
+              [title]="session.title"
+            >
+              <span class="cal__chip-time">{{ formatTime(session.date) }}</span>
+              <span class="cal__chip-title">{{ session.title }}</span>
+            </button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Panneau de création -->
+@if (adding()) {
+  <div class="sessions__overlay" (click)="cancelCreate()"></div>
+  <aside class="sessions__panel">
+    <div class="sessions__panel-header">
+      <div class="sessions__panel-meta">
+        <span class="sessions__panel-title">Nouvelle session</span>
+      </div>
+      <button class="sessions__panel-close" (click)="cancelCreate()" aria-label="Annuler">✕</button>
+    </div>
+    <div class="sessions__panel-body">
+      <div class="sessions__panel-section">
+        <label class="sessions__panel-label" for="cs-title">Titre *</label>
+        <input id="cs-title" class="sessions__panel-input" type="text" [value]="createTitle()"
+          (input)="createTitle.set($any($event.target).value)" placeholder="Titre de la session" />
+      </div>
+      <div class="sessions__panel-section">
+        <label class="sessions__panel-label" for="cs-contact">Contact *</label>
+        <select id="cs-contact" class="sessions__panel-select"
+          [value]="createContactId()"
+          (change)="createContactId.set($any($event.target).value)">
+          <option value="" disabled>Choisir un contact…</option>
+          @for (c of contacts(); track c.id) {
+            <option [value]="c.id">{{ c.name }}@if (c.company) { — {{ c.company }}}</option>
+          }
+        </select>
+      </div>
+      <div class="sessions__panel-section">
+        <label class="sessions__panel-label" for="cs-date">Date &amp; heure *</label>
+        <input id="cs-date" class="sessions__panel-input" type="datetime-local" [value]="createDate()"
+          (input)="createDate.set($any($event.target).value)" />
+      </div>
+      <div class="sessions__panel-section">
+        <label class="sessions__panel-label" for="cs-duration">Durée (minutes)</label>
+        <input id="cs-duration" class="sessions__panel-input" type="number" min="15" step="15"
+          [value]="createDuration()"
+          (input)="createDuration.set(+$any($event.target).value)" />
+      </div>
+      <div class="sessions__panel-section">
+        <span class="sessions__panel-label">Statut</span>
+        <div class="sessions__panel-statuses">
+          @for (s of allStatuses; track s) {
+            <button class="sessions__panel-status-btn"
+              [class.sessions__panel-status-btn--active]="createSessionStatus() === s"
+              (click)="createSessionStatus.set(s)">{{ statusLabels[s] }}</button>
+          }
+        </div>
+      </div>
+      <div class="sessions__panel-section">
+        <label class="sessions__panel-label" for="cs-notes">Notes</label>
+        <textarea id="cs-notes" class="sessions__panel-textarea" rows="3" [value]="createNotes()"
+          (input)="createNotes.set($any($event.target).value)"></textarea>
+      </div>
+    </div>
+    <div class="sessions__panel-footer">
+      <ft-button variant="ghost" size="sm" (clicked)="cancelCreate()">Annuler</ft-button>
+      <ft-button variant="primary" size="sm" (clicked)="saveCreate()">Créer</ft-button>
+    </div>
+  </aside>
+}
+
+<!-- Panneau de détail session -->
+@if (selectedSession(); as session) {
+  <div class="sessions__overlay" (click)="closePanel()"></div>
+  <aside class="sessions__panel">
+    <div class="sessions__panel-header">
+      <div class="sessions__panel-meta">
+        <span class="sessions__panel-title">{{ session.title }}</span>
+        <span class="sessions__panel-date">{{ formatFullDate(session.date) }}</span>
+      </div>
+      <button class="sessions__panel-close" (click)="closePanel()" aria-label="Fermer">✕</button>
+    </div>
+
+    <div class="sessions__panel-body">
+      <div class="sessions__panel-section">
+        <span class="sessions__panel-label">Statut</span>
+        <ft-badge [variant]="$any(statusVariants[session.status])" [dot]="true" size="sm">
+          {{ statusLabels[session.status] }}
+        </ft-badge>
+      </div>
+
+      <div class="sessions__panel-section">
+        <span class="sessions__panel-label">Client</span>
+        <div class="sessions__panel-client">
+          <ft-avatar [name]="session.contact.name" size="sm" />
+          <div>
+            <span class="sessions__panel-client-name">{{ session.contact.name }}</span>
+            @if (session.contact.company) {
+              <span class="sessions__panel-client-company">{{ session.contact.company }}</span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="sessions__panel-section">
+        <span class="sessions__panel-label">Durée</span>
+        <span class="sessions__panel-value">{{ formatDuration(session.duration) }}</span>
+      </div>
+
+      @if (session.notes) {
+        <div class="sessions__panel-section">
+          <span class="sessions__panel-label">Notes</span>
+          <p class="sessions__panel-notes">{{ session.notes }}</p>
+        </div>
+      }
+
+      <div class="sessions__panel-section">
+        <span class="sessions__panel-label">Changer le statut</span>
+        <div class="sessions__panel-statuses">
+          @for (s of allStatuses; track s) {
+            <button
+              class="sessions__panel-status-btn"
+              [class.sessions__panel-status-btn--active]="session.status === s"
+              (click)="updateSessionStatus(session, s)"
+            >{{ statusLabels[s] }}</button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="sessions__panel-footer">
+      <ft-button variant="ghost" size="sm" (click)="closePanel()">Fermer</ft-button>
+    </div>
+  </aside>
+}

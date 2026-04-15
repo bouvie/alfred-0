@@ -1,0 +1,32 @@
+# Owned by ContactsComponent
+
+fragment ContactRow on Contact {
+  id
+  name
+  company
+  status
+  tags
+  lastContact
+}
+
+query GetContacts($status: ContactStatus, $search: String) {
+  contacts(status: $status, search: $search) {
+    ...ContactRow
+  }
+}
+
+mutation CreateContact($input: CreateContactInput!) {
+  createContact(input: $input) {
+    ...ContactRow
+  }
+}
+
+mutation UpdateContact($id: ID!, $input: UpdateContactInput!) {
+  updateContact(id: $id, input: $input) {
+    ...ContactRow
+  }
+}
+
+mutation DeleteContact($id: ID!) {
+  deleteContact(id: $id)
+}

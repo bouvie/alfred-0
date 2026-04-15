@@ -1,0 +1,25 @@
+<div class="metric-card">
+  <span class="metric-card__label">{{ label() }}</span>
+
+  <div class="metric-card__value-row">
+    <span class="metric-card__value">{{ value() }}</span>
+    @if (unit()) {
+      <span class="metric-card__unit">{{ unit() }}</span>
+    }
+    @if (delta()) {
+      <span
+        class="metric-card__delta"
+        [class.metric-card__delta--up]="trend() === 'up'"
+        [class.metric-card__delta--down]="trend() === 'down'"
+      >
+        @if (trend() === 'up') { ↑ }
+        @if (trend() === 'down') { ↓ }
+        {{ delta() }}
+      </span>
+    }
+  </div>
+
+  @if (subtitle()) {
+    <span class="metric-card__subtitle">{{ subtitle() }}</span>
+  }
+</div>

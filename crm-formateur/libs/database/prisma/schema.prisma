@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum Role {
+  ADMIN
+  COLLABORATOR
+}
+
+enum ContactStatus {
+  PROSPECT
+  CONTACTED
+  QUALIFIED
+  PROPOSAL
+  WON
+  LOST
+}
+
+enum SessionStatus {
+  PLANNED
+  CONFIRMED
+  DONE
+  CANCELLED
+}
+
+// ─── Models ───────────────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  role      Role     @default(COLLABORATOR)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  assignedContacts Contact[] @relation("AssignedContacts")
+  sessions         Session[] @relation("SessionCollaborator")
+
+  @@map("users")
+}
+
+model Contact {
+  id          String        @id @default(cuid())
+  name        String
+  company     String?
+  status      ContactStatus @default(PROSPECT)
+  tags        String[]      @default([])
+  lastContact DateTime?
+  notes       String?
+  position    Int           @default(0)
+  assigneeId  String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  assignee User?     @relation("AssignedContacts", fields: [assigneeId], references: [id])
+  sessions Session[]
+
+  @@index([status])
+  @@index([assigneeId])
+  @@map("contacts")
+}
+
+model Session {
+  id            String        @id @default(cuid())
+  title         String
+  contactId     String
+  collaboratorId String?
+  date          DateTime
+  duration      Int
+  status        SessionStatus @default(PLANNED)
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  contact     Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  collaborator User?   @relation("SessionCollaborator", fields: [collaboratorId], references: [id])
+
+  @@index([contactId])
+  @@index([date])
+  @@index([status])
+  @@map("sessions")
+}
+
+model PipelineColumn {
+  id       String @id @default(cuid())
+  title    String
+  position Int
+  slug     String @unique
+
+  @@map("pipeline_columns")
+}

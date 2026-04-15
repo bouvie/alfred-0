@@ -1,0 +1,10 @@
+<div class="dashboard">
+  <h1 class="dashboard__title">Tableau de bord</h1>
+
+  <div class="dashboard__metrics">
+    <ft-metric-card label="Prospects actifs" [value]="activeProspects().toString()" trend="neutral" />
+    <ft-metric-card label="Sessions à venir" [value]="upcomingSessions().toString()" subtitle="Planifiées + confirmées" />
+    <ft-metric-card label="Taux de conversion" [value]="conversionRate().toString()" unit="%" trend="neutral" />
+    <ft-metric-card label="Contacts total" [value]="totalContacts().toString()" trend="neutral" />
+  </div>
+</div>

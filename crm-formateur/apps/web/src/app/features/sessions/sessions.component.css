@@ -1,0 +1,390 @@
+:host { display: block; }
+
+.sessions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ft-space-5);
+}
+
+.sessions__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sessions__title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ft-text);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* ── Navigation mois ── */
+.cal__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ft-space-3);
+}
+
+.cal__nav-center {
+  display: flex;
+  align-items: center;
+  gap: var(--ft-space-3);
+}
+
+.cal__month-label {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ft-text);
+  text-transform: capitalize;
+  min-width: 160px;
+  text-align: center;
+}
+
+.cal__nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--ft-radius-md);
+  border: 1px solid var(--ft-border);
+  background: var(--ft-surface);
+  color: var(--ft-text);
+  font-size: 18px;
+  cursor: pointer;
+  transition: background var(--ft-duration-normal) var(--ft-ease-standard);
+}
+
+.cal__nav-btn:hover { background: var(--ft-surface-2); }
+
+.cal__today-btn {
+  font-size: 12px;
+  padding: var(--ft-space-1) var(--ft-space-3);
+  border-radius: var(--ft-radius-full);
+  border: 1px solid var(--ft-border);
+  background: var(--ft-surface-2);
+  color: var(--ft-text-secondary);
+  cursor: pointer;
+  transition: all var(--ft-duration-normal) var(--ft-ease-standard);
+}
+
+.cal__today-btn:hover {
+  border-color: var(--ft-primary);
+  color: var(--ft-primary);
+}
+
+/* ── Grille ── */
+.cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border: 1px solid var(--ft-border);
+  border-radius: var(--ft-radius-lg);
+  overflow: hidden;
+}
+
+.cal__weekday {
+  padding: var(--ft-space-2) var(--ft-space-3);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ft-text-secondary);
+  background: var(--ft-surface-2);
+  text-align: center;
+  border-bottom: 1px solid var(--ft-border);
+}
+
+.cal__cell {
+  min-height: 100px;
+  padding: var(--ft-space-2);
+  background: var(--ft-surface);
+  border-right: 1px solid var(--ft-border);
+  border-bottom: 1px solid var(--ft-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ft-space-1);
+}
+
+.cal__cell:nth-child(7n) { border-right: none; }
+
+.cal__cell--other-month {
+  background: var(--ft-bg);
+}
+
+.cal__cell--other-month .cal__day-num {
+  color: var(--ft-text-disabled);
+}
+
+.cal__cell--today .cal__day-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--ft-radius-full);
+  background: var(--ft-primary);
+  color: var(--ft-primary-text);
+  font-weight: 700;
+}
+
+.cal__day-num {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ft-text-secondary);
+  line-height: 22px;
+}
+
+.cal__events {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ── Chips ── */
+.cal__cell--dragover {
+  background: var(--ft-primary-subtle);
+  outline: 2px dashed var(--ft-primary);
+  outline-offset: -2px;
+}
+
+.cal__chip {
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 2px var(--ft-space-2);
+  border-radius: var(--ft-radius-sm);
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity var(--ft-duration-normal) var(--ft-ease-standard);
+}
+
+.cal__chip:hover { opacity: 0.8; }
+.cal__chip--dragging { opacity: 0.4; cursor: grabbing; }
+
+.cal__chip--planned {
+  background: var(--ft-info-subtle);
+  color: var(--ft-info);
+  border-left: 2px solid var(--ft-info);
+}
+
+.cal__chip--confirmed {
+  background: var(--ft-primary-subtle);
+  color: var(--ft-primary);
+  border-left: 2px solid var(--ft-primary);
+}
+
+.cal__chip--done {
+  background: var(--ft-success-subtle);
+  color: var(--ft-success);
+  border-left: 2px solid var(--ft-success);
+}
+
+.cal__chip--cancelled {
+  background: var(--ft-danger-subtle);
+  color: var(--ft-danger);
+  border-left: 2px solid var(--ft-danger);
+  opacity: 0.6;
+}
+
+.cal__chip-time {
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.cal__chip-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Panneau session ── */
+.sessions__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 105;
+}
+
+.sessions__panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 380px;
+  background: var(--ft-surface);
+  border-left: 1px solid var(--ft-border);
+  z-index: 110;
+  display: flex;
+  flex-direction: column;
+  animation: session-panel-in 200ms var(--ft-ease-standard);
+}
+
+@keyframes session-panel-in {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+.sessions__panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ft-space-3);
+  padding: var(--ft-space-6);
+  border-bottom: 1px solid var(--ft-border);
+}
+
+.sessions__panel-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ft-space-1);
+}
+
+.sessions__panel-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ft-text);
+}
+
+.sessions__panel-date {
+  font-size: 13px;
+  color: var(--ft-text-secondary);
+  text-transform: capitalize;
+}
+
+.sessions__panel-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ft-text-secondary);
+  font-size: 16px;
+  padding: var(--ft-space-1);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.sessions__panel-close:hover { color: var(--ft-text); }
+
+.sessions__panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--ft-space-5) var(--ft-space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ft-space-5);
+}
+
+.sessions__panel-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ft-space-2);
+}
+
+.sessions__panel-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ft-text-secondary);
+}
+
+.sessions__panel-value {
+  font-size: 14px;
+  color: var(--ft-text);
+}
+
+.sessions__panel-notes {
+  font-size: 14px;
+  color: var(--ft-text);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.sessions__panel-client {
+  display: flex;
+  align-items: center;
+  gap: var(--ft-space-3);
+}
+
+.sessions__panel-client-name {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ft-text);
+}
+
+.sessions__panel-client-company {
+  display: block;
+  font-size: 12px;
+  color: var(--ft-text-secondary);
+}
+
+.sessions__panel-statuses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ft-space-2);
+}
+
+.sessions__panel-status-btn {
+  padding: var(--ft-space-1) var(--ft-space-3);
+  border-radius: var(--ft-radius-full);
+  border: 1px solid var(--ft-border);
+  background: var(--ft-surface-2);
+  color: var(--ft-text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all var(--ft-duration-normal) var(--ft-ease-standard);
+}
+
+.sessions__panel-status-btn:hover {
+  border-color: var(--ft-primary);
+  color: var(--ft-primary);
+}
+
+.sessions__panel-status-btn--active {
+  background: var(--ft-primary-subtle);
+  border-color: var(--ft-primary);
+  color: var(--ft-primary);
+  font-weight: 600;
+}
+
+.sessions__panel-input,
+.sessions__panel-textarea,
+.sessions__panel-select {
+  width: 100%;
+  background: var(--ft-surface-2);
+  border: 1px solid var(--ft-border);
+  border-radius: var(--ft-radius-md);
+  padding: var(--ft-space-2) var(--ft-space-3);
+  color: var(--ft-text);
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  font-family: inherit;
+  transition: border-color var(--ft-duration-normal) var(--ft-ease-standard);
+}
+
+.sessions__panel-textarea { resize: vertical; }
+.sessions__panel-select { cursor: pointer; }
+
+.sessions__panel-input:focus,
+.sessions__panel-textarea:focus,
+.sessions__panel-select:focus {
+  border-color: var(--ft-primary);
+}
+
+.sessions__panel-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: var(--ft-space-4) var(--ft-space-6);
+  border-top: 1px solid var(--ft-border);
+}

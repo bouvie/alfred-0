@@ -1,0 +1,20 @@
+<button
+  class="btn"
+  [class.btn--primary]="safeVariant() === 'primary'"
+  [class.btn--secondary]="safeVariant() === 'secondary'"
+  [class.btn--ghost]="safeVariant() === 'ghost'"
+  [class.btn--danger]="safeVariant() === 'danger'"
+  [class.btn--sm]="safeSize() === 'sm'"
+  [class.btn--md]="safeSize() === 'md'"
+  [class.btn--lg]="safeSize() === 'lg'"
+  [class.btn--full]="fullWidth()"
+  [class.btn--loading]="isLoading()"
+  [disabled]="disabled() || isLoading()"
+  [type]="type()"
+  (click)="onClick()"
+>
+  @if (isLoading()) {
+    <span class="btn__spinner" aria-hidden="true"></span>
+  }
+  <ng-content />
+</button>

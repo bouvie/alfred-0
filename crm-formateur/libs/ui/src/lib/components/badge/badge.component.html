@@ -1,0 +1,16 @@
+<span
+  class="badge"
+  [class.badge--success]="safeVariant() === 'success'"
+  [class.badge--warning]="safeVariant() === 'warning'"
+  [class.badge--danger]="safeVariant() === 'danger'"
+  [class.badge--info]="safeVariant() === 'info'"
+  [class.badge--primary]="safeVariant() === 'primary'"
+  [class.badge--neutral]="safeVariant() === 'neutral'"
+  [class.badge--sm]="size() === 'sm'"
+  [class.badge--dot]="dot()"
+>
+  @if (dot()) {
+    <span class="badge__dot" aria-hidden="true"></span>
+  }
+  <ng-content />
+</span>

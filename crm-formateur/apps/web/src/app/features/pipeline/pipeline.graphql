@@ -1,0 +1,35 @@
+# Owned by PipelineComponent
+
+fragment PipelineContact on Contact {
+  id
+  name
+  company
+  status
+  tags
+  lastContact
+}
+
+fragment PipelineColumn on PipelineColumn {
+  id
+  title
+  position
+  contacts {
+    ...PipelineContact
+  }
+}
+
+query GetPipeline {
+  pipeline {
+    columns {
+      ...PipelineColumn
+    }
+    totalContacts
+  }
+}
+
+mutation MoveContact($input: MoveContactInput!) {
+  moveContact(input: $input) {
+    id
+    status
+  }
+}
